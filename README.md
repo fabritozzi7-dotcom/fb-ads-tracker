@@ -89,11 +89,40 @@ Variables opcionales:
 
 ## Uso
 
+Hay dos modalidades de ejecución:
+
+### Modo API (requiere App Review de Meta)
+
 ```bash
 python main.py
 ```
 
-El script consulta la API, inserta/actualiza anuncios en Supabase y marca como inactivos los que ya no aparecen.
+Consulta la Meta Ads Library API directamente, inserta/actualiza anuncios en Supabase y marca como inactivos los que ya no aparecen. Requiere que tu app en Meta tenga el caso de uso **Ad Library** aprobado y el permiso `ads_read` habilitado.
+
+### Modo CSV/JSON (funciona sin aprobación)
+
+```bash
+python main_csv.py data/ads_export.csv
+python main_csv.py data/ads_export.json
+```
+
+Importa anuncios desde un archivo local descargado manualmente de la [Meta Ad Library](https://www.facebook.com/ads/library/). No requiere aprobación de Meta.
+
+**Formato CSV esperado** (columnas obligatorias):
+
+```csv
+ad_id,page_id,page_name,ad_text,snapshot_url,start_date
+123456,789,"Mi Página","Texto del anuncio","https://...",2024-01-15
+```
+
+Columnas opcionales: `image_url`, `link_caption`, `link_title`
+
+**Formato JSON**: lista de objetos con el mismo formato que la Graph API, o un dict con clave `data`.
+
+Para obtener los datos manualmente:
+1. Ir a [facebook.com/ads/library](https://www.facebook.com/ads/library/)
+2. Buscar por nombre de página o palabra clave
+3. Copiar los datos de los anuncios al CSV con el formato de arriba
 
 ## Ejecución automática (GitHub Actions)
 

@@ -53,19 +53,30 @@ def normalize_ad_row(raw: dict[str, Any], *, now_iso: str) -> dict[str, Any]:
     # Si en el futuro Meta agrega un campo de imagen, mapearlo acá.
     snapshot_url = raw.get("ad_snapshot_url")
 
-    return {
+    row: dict[str, Any] = {
         "ad_id": ad_id,
         "page_id": page_id,
         "page_name": page_name,
         "ad_text": _join_creative_bodies(raw.get("ad_creative_bodies")),
         "snapshot_url": snapshot_url,
         "image_url": None,
-        "link_caption": _first_non_empty(raw.get("ad_creative_link_captions")),
-        "link_title": _first_non_empty(raw.get("ad_creative_link_titles")),
         "start_date": _parse_start_date(raw.get("ad_delivery_start_time")),
         "last_seen": now_iso,
         "is_active": True,
     }
+
+    # Los campos ad_creative_link_captions y ad_creative_link_titles están
+    # disponibles en la API pero no se persisten porque la tabla
+    # anuncios_competencia no tiene esas columnas. Si se agregan las
+    # columnas link_caption y link_title a la tabla, descomentar:
+    # link_caption = _first_non_empty(raw.get("ad_creative_link_captions"))
+    # link_title = _first_non_empty(raw.get("ad_creative_link_titles"))
+    # if link_caption:
+    #     row["link_caption"] = link_caption
+    # if link_title:
+    #     row["link_title"] = link_title
+
+    return row
 
 
 def utc_now_iso() -> str:

@@ -30,13 +30,13 @@ def main() -> int:
         return 1
 
     errors = summary.get("chunk_errors", 0)
-    print("── Sincronización completada ──")
-    print(f"  Páginas procesadas : {', '.join(summary['page_ids'])}")
+    print("-- Sincronizacion completada --")
+    print(f"  Paginas procesadas   : {', '.join(summary['page_ids'])}")
     print(f"  Ads enviados (upsert): {summary['upserted']}")
     print(f"  Ads marcados inactivos: {summary['marked_inactive']}")
     print(f"  Errores de chunk     : {errors}")
     if errors:
-        print("  ⚠ Algunos chunks fallaron. Revisá los logs para más detalle.")
+        print("  WARN: Algunos chunks fallaron. Revisa los logs para mas detalle.")
     return 1 if errors else 0
 
 

@@ -114,8 +114,8 @@ class TestNormalizeAdRow:
         assert row["ad_text"] == "Ad text here"
         assert row["snapshot_url"] == "https://facebook.com/ads/archive/..."
         assert row["image_url"] is None
-        assert row["link_caption"] == "example.com"
-        assert row["link_title"] == "Click here"
+        assert "link_caption" not in row  # not persisted (table lacks column)
+        assert "link_title" not in row
         assert row["start_date"] == "2024-01-15"
         assert row["last_seen"] == NOW
         assert row["is_active"] is True
@@ -129,8 +129,8 @@ class TestNormalizeAdRow:
         assert row["ad_text"] is None
         assert row["snapshot_url"] is None
         assert row["image_url"] is None
-        assert row["link_caption"] is None
-        assert row["link_title"] is None
+        assert "link_caption" not in row
+        assert "link_title" not in row
         assert row["start_date"] is None
 
     def test_none_values(self):
@@ -149,7 +149,7 @@ class TestNormalizeAdRow:
         assert row["ad_id"] == ""
         assert row["page_name"] is None
         assert row["ad_text"] is None
-        assert row["link_caption"] is None
+        assert "link_caption" not in row
 
     def test_whitespace_page_name(self):
         raw = {"id": "1", "page_id": "2", "page_name": "   "}
