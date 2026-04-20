@@ -12,11 +12,9 @@ load_dotenv()
 class Settings:
     supabase_url: str
     supabase_key: str
-    facebook_access_token: str
-    graph_version: str = "v19.0"
-    mark_stale_inactive: bool = True
-    meta_max_retries: int = 5
-    meta_initial_backoff_seconds: float = 2.0
+    apify_token: str
+    apify_actor_id: str = "curious_coder/facebook-ads-library-scraper"
+    max_items_per_competitor: int = 200
 
 
 def _require_env(name: str) -> str:
@@ -30,19 +28,11 @@ def load_settings() -> Settings:
     return Settings(
         supabase_url=_require_env("SUPABASE_URL"),
         supabase_key=_require_env("SUPABASE_KEY"),
-        facebook_access_token=_require_env("FACEBOOK_ACCESS_TOKEN"),
-        graph_version=os.getenv("META_GRAPH_VERSION", "v19.0").strip() or "v19.0",
-        mark_stale_inactive=os.getenv("MARK_STALE_INACTIVE", "true").lower()
-        in ("1", "true", "yes", "y"),
-        meta_max_retries=int(os.getenv("META_MAX_RETRIES", "5")),
-        meta_initial_backoff_seconds=float(
-            os.getenv("META_INITIAL_BACKOFF_SECONDS", "2.0")
+        apify_token=_require_env("APIFY_TOKEN"),
+        apify_actor_id=os.getenv(
+            "APIFY_ACTOR_ID", "curious_coder/facebook-ads-library-scraper"
+        ).strip(),
+        max_items_per_competitor=int(
+            os.getenv("APIFY_MAX_ITEMS", "200")
         ),
     )
-
-
-def parse_page_ids_from_env() -> list[str] | None:
-    raw = os.getenv("SEARCH_PAGE_IDS", "").strip()
-    if not raw:
-        return None
-    return [p.strip() for p in raw.split(",") if p.strip()]

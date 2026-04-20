@@ -22,3 +22,6 @@ venv/
 .idea/
 *.swp
 *.swo
+
+.vercel
+.env*.local
